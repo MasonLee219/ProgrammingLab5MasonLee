@@ -8,7 +8,7 @@ static double const MS_PER_UPDATE = 10.0;
 ////////////////////////////////////////////////////////////
 Game::Game()
 	: m_window(sf::VideoMode(ScreenSize::s_height, ScreenSize::s_width, 32), "SFML Playground", sf::Style::Default)
-	, m_Tank(m_spriteSheetTexture, sf::Vector2f(0,0))
+	, m_Tank(m_spriteSheetTexture, m_wallSprites)
 {
 	//m_window.setVerticalSyncEnabled(true);
 
@@ -39,27 +39,8 @@ Game::Game()
 	if (!m_backgroundTexture.loadFromFile(m_level.m_background.m_fileName));
 	m_background.setTexture(m_backgroundTexture);
 
-	if (!m_spriteSheetTexture.loadFromFile("./resources/images/SpriteSheet.png"))
-	{
-		std::string errorMsg("Error loading texture");
-		throw std::exception(errorMsg.c_str());
-	}
-	
 
-
-	// Extract the wall image from the spritesheet.
-	sf::Sprite sprite;
-	sf::IntRect wallRect(2, 129, 33, 23);
-	sprite.setTexture(m_spriteSheetTexture);
-	sprite.setTextureRect(wallRect);
-	// Loop through each Obstacle instance - recall that Obstacles are structs
-	for (auto& obstacle : m_level.m_obstacles)
-	{
-		// Position the wall sprite using the obstacle data
-		sprite.setPosition(obstacle.m_position);
-		sprite.rotate(obstacle.m_rotation);
-		m_sprites.push_back(sprite);
-	}
+	generateWalls();
 }
 
 ////////////////////////////////////////////////////////////
@@ -141,8 +122,29 @@ void Game::render()
 		m_window.draw(sprite);
 		//i++;
 	}
+	for (sf::Sprite& sprite : m_wallSprites)
+	{
+		m_window.draw(sprite);
+	}
 	m_Tank.render(m_window);
 	m_window.display();
+}
+
+////////////////////////////////////////////////////////////
+void Game::generateWalls()
+{
+	sf::IntRect wallRect(2, 129, 33, 23);
+	// Create the Walls 
+	for (ObstacleData const& obstacle : m_level.m_obstacles)
+	{
+		sf::Sprite sprite;
+		sprite.setTexture(m_spriteSheetTexture);
+		sprite.setTextureRect(wallRect);
+		sprite.setOrigin(wallRect.width / 2.0, wallRect.height / 2.0);
+		sprite.setPosition(obstacle.m_position);
+		sprite.setRotation(obstacle.m_rotation);
+		m_wallSprites.push_back(sprite);
+	}
 }
 
 

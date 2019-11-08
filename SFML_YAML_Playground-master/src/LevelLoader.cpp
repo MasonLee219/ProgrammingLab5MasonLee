@@ -1,4 +1,5 @@
 #include "LevelLoader.h"
+#include "Game.h"
 
 void getObstacleData(const YAML::Node& obstacleNode, ObstacleData& obstacle)
 {
@@ -111,3 +112,4 @@ bool LevelLoader::load(int nr, LevelData& level)
 
    return true;
 }
+

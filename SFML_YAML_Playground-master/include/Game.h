@@ -69,6 +69,13 @@ protected:
 	/// <param name="event">system event</param>
 	void processGameEvents(sf::Event & event);
 
+	/// <summary>
+	/// @brief Creates the wall sprites and loads them into a vector.
+	/// Note that sf::Sprite is considered a light weight class, so 
+	///  storing copies (instead of pointers to sf::Sprite) in std::vector is acceptable.
+	/// </summary>
+	void generateWalls();
+
 	// main window
 	sf::RenderWindow m_window;
 
@@ -76,13 +83,17 @@ private:
 	// To store the game level data.
 	Tank m_Tank;
 	LevelData m_level;
-	
-	sf::Texture m_playerTexture;
+
 
 	sf::Sprite m_background;
 	sf::Texture m_backgroundTexture;
 
 	std::vector<sf::Sprite>  m_sprites;
+
+	// Wall sprites
+	std::vector<sf::Sprite> m_wallSprites;
+
+	
 	// A texture for the sprite sheet
 	sf::Texture m_spriteSheetTexture;
 };
