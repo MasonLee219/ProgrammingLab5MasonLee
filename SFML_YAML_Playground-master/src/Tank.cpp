@@ -25,15 +25,19 @@ void Tank::update(double dt)
 
 	double y = m_tankBase.getPosition().y + std::sin(MathUtility::DEG_TO_RAD * m_rotation) * m_speed * (dt / 1000);
 
+	
+	
 	m_tankBase.setRotation(m_rotation);
 	m_turret.setRotation(m_turretRotation);
 	m_tankBase.setPosition(x, y);
 	m_turret.setPosition(m_tankBase.getPosition());
 
+	getPrevious();
+	
 	m_speed *= 0.99;
 	
 
-	m_speed = std::clamp(m_speed, -200.0, 200.0);
+	m_speed = std::clamp(m_speed, -50.0, 50.0);
 }
 
 void Tank::render(sf::RenderWindow& window)
@@ -76,6 +80,7 @@ void Tank::decreaseSpeed()
 ////////////////////////////////////////////////////////////
 void Tank::increaseRotation()
 {
+	m_previousRotation = m_rotation; // NEW
 	m_rotation += 1;
 	if (m_rotation == 360.0)
 	{
@@ -86,6 +91,7 @@ void Tank::increaseRotation()
 ////////////////////////////////////////////////////////////
 void Tank::decreaseRotation()
 {
+	m_previousRotation = m_rotation; // NEW
 	m_rotation -= 1;
 	if (m_rotation == 0.0)
 	{
@@ -95,6 +101,7 @@ void Tank::decreaseRotation()
 
 void Tank::increaseTurretRotation()
 {
+	m_previousTurretRotation = m_turretRotation;
 	m_turretRotation += 1;
 	if (m_turretRotation == 360.0)
 	{
@@ -104,6 +111,7 @@ void Tank::increaseTurretRotation()
 
 void Tank::decreaseTurretRotation()
 {
+	m_previousTurretRotation = m_turretRotation;
 	m_turretRotation -= 1;
 	if (m_turretRotation == 0.0)
 	{
@@ -160,17 +168,6 @@ void Tank::adjustRotation()
 	}
 }
 
-////////////////////////////////////////////////////////////
-void Tank::increaseRotation()
-{
-	m_previousRotation = m_rotation; // NEW
-	m_rotation += 1;
-	if (m_rotation == 360.0)
-	{
-		m_rotation = 0;
-	}
-}
-
 void Tank::deflect()
 {
 	// In case tank was rotating.
@@ -198,6 +195,7 @@ void Tank::deflect()
 void Tank::getPrevious()
 {
 	m_previousPosition = m_tankBase.getPosition();
+	
 
 }
 

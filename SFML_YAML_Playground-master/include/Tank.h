@@ -119,7 +119,9 @@ private:
 
 	// The current rotation as applied to tank base.
 	double m_rotation{ 0.0 };
+	double m_previousRotation{ 0.0 };
 	double m_turretRotation{ 0.0 };
+	double m_previousTurretRotation{ 0.0 };
 
 	void adjustRotation();
 	void getPrevious();
